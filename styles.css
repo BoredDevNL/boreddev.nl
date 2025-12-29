@@ -211,7 +211,8 @@ h2  {
     position: fixed;
     left: 50%;
     right: auto;
-    transform: translateX(-50%);
+    transform: translateX(-150%);
+    animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .nav-bar.scrolled .nav-content {
@@ -363,14 +364,10 @@ h2  {
 }
 
 .social-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 32px;
     height: 32px;
     transition: all 0.2s ease;
     cursor: pointer;
-    color: var(--text-primary);
 }
 
 .social-icon:hover {
@@ -382,12 +379,6 @@ h2  {
     width: 32px;
     height: 32px;
     transition: all 0.2s ease;
-    pointer-events: none;
-}
-
-.social-icon object {
-    pointer-events: none;
-    color: currentColor;
 }
 
 /* Skills Section */
@@ -718,6 +709,17 @@ section {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(-150%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(-50%);
+        opacity: 1;
+    }
 }
 
 section {
