@@ -45,14 +45,17 @@ window.addEventListener('scroll', () => {
 
 navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            const offsetPosition = target.offsetTop - 100;
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
+        const href = link.getAttribute('href');
+        if (href.startsWith('#')) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                const offsetPosition = target.offsetTop - 100;
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
         }
     });
 });
