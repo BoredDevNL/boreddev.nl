@@ -1,6 +1,7 @@
 const nav = document.querySelector('.nav-bar');
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links');
+const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
 const sections = document.querySelectorAll('section');
 const skillCategories = document.querySelectorAll('.skill-category');
 const projectCards = document.querySelectorAll('.project-card');
@@ -34,6 +35,23 @@ window.addEventListener('scroll', () => {
         nav.classList.remove('scrolled');
     }
 
+    // Update mobile nav active state
+    let currentSection = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (currentScroll >= sectionTop - 200) {
+            currentSection = section.getAttribute('id');
+        }
+    });
+
+    mobileNavLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${currentSection}`) {
+            link.classList.add('active');
+        }
+    });
+
     planets.forEach((planet, index) => {
         const speed = (index + 1) * 0.15;
         const yPos = currentScroll * speed;
@@ -44,6 +62,24 @@ window.addEventListener('scroll', () => {
 });
 
 navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href.startsWith('#')) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                const offsetPosition = target.offsetTop - 100;
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    });
+});
+
+// Mobile nav link scroll handler
+mobileNavLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
         if (href.startsWith('#')) {
