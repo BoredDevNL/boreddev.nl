@@ -1,239 +1,205 @@
-const nav = document.querySelector('.nav-bar');
-const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
-const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
-const sections = document.querySelectorAll('section');
-const skillCategories = document.querySelectorAll('.skill-category');
-const projectCards = document.querySelectorAll('.project-card');
-const sectionHeadings = document.querySelectorAll('section > h2');
-const planets = document.querySelectorAll('.planet');
+document.addEventListener('DOMContentLoaded', () => {
+    // Typing Effect
+    const nameText = "Chris";
+    const typingSpeed = 150; // ms per char
+    const typingElement = document.getElementById('typing-text');
+    let charIndex = 0;
 
-VANTA.DOTS({
-    el: "#hero-background",
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.00,
-    minWidth: 200.00,
-    scale: 1.00,
-    scaleMobile: 1.00,
-    color: 0x9a8c98,
-    color2: 0x4a4e69,
-    backgroundColor: 0x22223b,
-    size: 3,
-    spacing: 35.00,
-    showLines: false
-});
-
-let lastScroll = 0;
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > 50) {
-        nav.classList.add('scrolled');
-    } else {
-        nav.classList.remove('scrolled');
+    function type() {
+        if (charIndex < nameText.length) {
+            typingElement.textContent += nameText.charAt(charIndex);
+            charIndex++;
+            setTimeout(type, typingSpeed);
+        }
     }
 
-    // Update mobile nav active state
-    let currentSection = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (currentScroll >= sectionTop - 200) {
-            currentSection = section.getAttribute('id');
-        }
-    });
+    setTimeout(type, 500);
 
-    mobileNavLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${currentSection}`) {
-            link.classList.add('active');
-        }
-    });
+    // Local Time Clock
+    function updateTime() {
+        const timeElement = document.getElementById('local-time');
+        const now = new Date();
+        
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        
+        timeElement.textContent = `${hours}:${minutes}`;
+    }
 
-    planets.forEach((planet, index) => {
-        const speed = (index + 1) * 0.15;
-        const yPos = currentScroll * speed;
-        planet.style.transform = `translateY(${yPos}px) rotate(${yPos * 0.2}deg)`;
-    });
+    updateTime();
+    setInterval(updateTime, 1000);
 
-    lastScroll = currentScroll;
+    // Fetch GitHub Commits
+    fetchGitHubCommits();
+    fetchBlogPosts();
 });
 
-navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        if (href.startsWith('#')) {
-            e.preventDefault();
-            const target = document.querySelector(href);
-            if (target) {
-                const offsetPosition = target.offsetTop - 100;
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }
+async function fetchGitHubCommits() {
+    const feedElement = document.getElementById('github-feed');
+    const username = 'boreddevnl';
+    const cacheKey = 'github_commits_cache';
+    const cacheDuration = 15 * 60 * 1000; 
+
+    // Check cache first
+    const cachedData = localStorage.getItem(cacheKey);
+    if (cachedData) {
+        const { timestamp, events } = JSON.parse(cachedData);
+        if (Date.now() - timestamp < cacheDuration) {
+            console.log('Using cached GitHub data');
+            await renderCommits(events, feedElement, username);
+            return;
         }
-    });
-});
-
-// Mobile nav link scroll handler
-mobileNavLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        if (href.startsWith('#')) {
-            e.preventDefault();
-            const target = document.querySelector(href);
-            if (target) {
-                const offsetPosition = target.offsetTop - 100;
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }
+    }
+    
+    try {
+        const response = await fetch(`https://api.github.com/users/${username}/events/public`);
+        
+        if (response.status === 403) {
+             throw new Error('Rate limit exceeded');
         }
-    });
-});
-
-
-const observerOptions = {
-    threshold: 0.15,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const headingObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateX(0)';
-            headingObserver.unobserve(entry.target);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
-    });
-}, observerOptions);
 
-const skillsObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-            entry.target.style.transitionDelay = `${index * 100}ms`;
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0) scale(1)';
-            skillsObserver.unobserve(entry.target);
+        const events = await response.json();
+        
+        // Cache the successful response
+        localStorage.setItem(cacheKey, JSON.stringify({
+            timestamp: Date.now(),
+            events: events
+        }));
+
+        await renderCommits(events, feedElement, username);
+
+    } catch (error) {
+        console.error('Error fetching GitHub commits:', error);
+        if (error.message === 'Rate limit exceeded') {
+             feedElement.innerHTML = '<li>API Rate limit exceeded. Try again later.</li>';
+        } else {
+             feedElement.innerHTML = '<li>Error loading commits. Check console for details.</li>';
         }
-    });
-}, observerOptions);
+    }
+}
 
-const projectsObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-            entry.target.style.transitionDelay = `${index * 150}ms`;
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateX(0)';
-            projectsObserver.unobserve(entry.target);
+async function renderCommits(events, feedElement, username) {
+    // Filter for PushEvents (commits)
+    const pushEvents = events.filter(event => event.type === 'PushEvent').slice(0, 5);
+
+    if (pushEvents.length === 0) {
+        feedElement.innerHTML = '<li>No recent public commits found.</li>';
+        return;
+    }
+
+    feedElement.innerHTML = ''; // Clear loading text
+
+    const commitDetails = await Promise.all(pushEvents.map(async (event) => {
+        try {
+            // Use the last commit in the push, or the head SHA if the array is empty
+            const commitUrl = (event.payload.commits && event.payload.commits.length > 0)
+                ? event.payload.commits[event.payload.commits.length - 1].url
+                : `https://api.github.com/repos/${event.repo.name}/commits/${event.payload.head}`;
+
+            const response = await fetch(commitUrl);
+            if (!response.ok) throw new Error('Detail fetch failed');
+            
+            const data = await response.json();
+            return {
+                repoName: event.repo.name.replace(`${username}/`, ''),
+                repoUrl: `https://github.com/${event.repo.name}`,
+                message: data.commit.message.split('\n')[0],
+                additions: data.stats.additions,
+                deletions: data.stats.deletions,
+                timeAgo: getTimeAgo(new Date(event.created_at)),
+                htmlUrl: data.html_url
+            };
+        } catch (err) {
+            console.error("Could not fetch commit details:", err);
+            return null;
         }
-    });
-}, observerOptions);
+    }));
 
-sectionHeadings.forEach(heading => {
-    heading.style.opacity = '0';
-    heading.style.transform = 'translateX(-50px)';
-    heading.style.transition = 'all 0.8s cubic-bezier(0.17, 0.55, 0.55, 1)';
-    headingObserver.observe(heading);
-});
+    commitDetails.forEach(commit => {
+        if (!commit) return;
 
-skillCategories.forEach(category => {
-    category.style.opacity = '0';
-    category.style.transform = 'translateY(30px) scale(0.95)';
-    category.style.transition = 'all 0.6s cubic-bezier(0.17, 0.55, 0.55, 1)';
-    skillsObserver.observe(category);
-});
-
-projectCards.forEach((card, index) => {
-    card.style.opacity = '0';
-    card.style.transform = index % 2 === 0 ? 'translateX(-50px)' : 'translateX(50px)';
-    card.style.transition = 'all 0.7s cubic-bezier(0.17, 0.55, 0.55, 1)';
-    projectsObserver.observe(card);
-});
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            const headerOffset = 100;
-            const elementPosition = target.offsetTop;
-            const offsetPosition = elementPosition - headerOffset;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const hero = document.querySelector('.hero');
-    const greeting = document.querySelector('.greeting');
-    const intro = document.querySelector('.intro');
-    const locationRow = document.querySelector('.location-row');
-    const socialIcons = document.querySelector('.social-icons');
-
-    const maxRotation = 10;
-    const maxTransform = 15;
-
-    hero.addEventListener('mousemove', (e) => {
-        const rect = hero.getBoundingClientRect();
-        const xPos = ((e.clientX - rect.left) / rect.width - 0.5) * 100;
-        const yPos = ((e.clientY - rect.top) / rect.height - 0.5) * 100;
-        const xRotation = (yPos / 50) * maxRotation;
-        const yRotation = (xPos / 50) * -maxRotation;
-
-        greeting.style.transform = `
-            translateX(${xPos * 0.1}px)
-            translateY(${yPos * 0.1}px)
-            rotateX(${xRotation}deg)
-            rotateY(${yRotation}deg)
-            translateZ(50px)
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <a href="${commit.repoUrl}" target="_blank" class="feed-repo" style="color: #cba6f7; text-decoration: none; font-weight: bold;">${commit.repoName}</a>: 
+            <a href="${commit.htmlUrl}" target="_blank" style="color: #89b4fa; text-decoration: none; border-bottom: 1px dashed rgba(137, 180, 250, 0.3); transition: border-bottom 0.2s;">${escapeHtml(commit.message)}</a>
+            <span class="feed-stats" style="font-size: 0.85em; opacity: 0.8;">
+                (<span style="color: #a6e3a1;">+${commit.additions}</span> <span style="color: #f38ba8;">-${commit.deletions}</span>)
+            </span>
+            <span class="feed-time">${commit.timeAgo}</span>
         `;
-
-        intro.style.transform = `
-            translateX(${xPos * 0.05}px)
-            translateY(${yPos * 0.05}px)
-            rotateX(${xRotation * 0.5}deg)
-            rotateY(${yRotation * 0.5}deg)
-            translateZ(25px)
-        `;
-
-        if (locationRow) {
-            locationRow.style.transform = `
-                translateX(${xPos * 0.08}px)
-                translateY(${yPos * 0.08}px)
-                rotateX(${xRotation * 0.7}deg)
-                rotateY(${yRotation * 0.7}deg)
-                translateZ(35px)
-            `;
-        }
-
-        if (socialIcons) {
-            socialIcons.style.transform = `
-                translateX(${xPos * 0.07}px)
-                translateY(${yPos * 0.07}px)
-                rotateX(${xRotation * 0.6}deg)
-                rotateY(${yRotation * 0.6}deg)
-                translateZ(30px)
-            `;
-        }
+        feedElement.appendChild(li);
     });
+}
 
-    hero.addEventListener('mouseleave', () => {
-        greeting.style.transform = 'translateZ(0)';
-        intro.style.transform = 'translateZ(0)';
-        if (locationRow) {
-            locationRow.style.transform = 'translateZ(0)';
+function getTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    
+    let interval = seconds / 31536000;
+    if (interval > 1) return Math.floor(interval) + "y ago";
+    
+    interval = seconds / 2592000;
+    if (interval > 1) return Math.floor(interval) + "mo ago";
+    
+    interval = seconds / 86400;
+    if (interval > 1) return Math.floor(interval) + "d ago";
+    
+    interval = seconds / 3600;
+    if (interval > 1) return Math.floor(interval) + "h ago";
+    
+    interval = seconds / 60;
+    if (interval > 1) return Math.floor(interval) + "m ago";
+    
+    return Math.floor(seconds) + "s ago";
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+async function fetchBlogPosts() {
+    const feedElement = document.getElementById('blog-feed');
+    
+    try {
+        const response = await fetch('https://blog.boreddev.nl/index.json');
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
-        if (socialIcons) {
-            socialIcons.style.transform = 'translateZ(0)';
+
+        const posts = await response.json();
+        
+        const recentPosts = posts.slice(0, 3);
+
+        if (recentPosts.length === 0) {
+            feedElement.innerHTML = '<li>No recent posts found.</li>';
+            return;
         }
-    });
-});
+
+        feedElement.innerHTML = '';
+
+        recentPosts.forEach(post => {
+            const li = document.createElement('li');
+            
+            let timeSpan = '';
+            const dateStr = post.date || post.publishDate || post.published_at;
+            if (dateStr) {
+                 const date = new Date(dateStr);
+                 if (!isNaN(date.getTime())) {
+                     timeSpan = ` <span class="feed-time">${getTimeAgo(date)}</span>`;
+                 }
+            }
+
+            li.innerHTML = `<a href="${post.permalink}" target="_blank">${escapeHtml(post.title)}</a>${timeSpan}`;
+            feedElement.appendChild(li);
+        });
+
+    } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        feedElement.innerHTML = '<li>Error loading posts.</li>';
+    }
+}
