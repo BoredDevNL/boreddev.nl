@@ -203,6 +203,21 @@ a:hover {
 .tag-red { color: var(--ctp-red); background-color: rgba(243, 139, 168, 0.1); }
 .tag-lavender { color: var(--ctp-lavender); background-color: rgba(180, 190, 254, 0.1); }
 
+.project-links {
+    margin-top: 1.25rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.project-links a {
+    font-size: 1.2rem;
+    color: var(--ctp-subtext0);
+}
+
+.project-links a:hover {
+    color: var(--ctp-blue);
+}
+
 /* Activity Feed */
 .activity-feed {
     display: grid;
@@ -236,6 +251,19 @@ a:hover {
 .feed-repo {
     color: var(--ctp-teal);
     font-weight: 600;
+}
+
+.feed-message {
+    display: inline-block;
+    vertical-align: bottom;
+    max-width: 32ch;
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(137, 180, 250, 0.3);
+    transition: border-bottom 0.2s;
+    mask-image: linear-gradient(to right, black 30ch, transparent 32ch);
+    -webkit-mask-image: linear-gradient(to right, black 30ch, transparent 32ch);
 }
 
 .feed-time {
