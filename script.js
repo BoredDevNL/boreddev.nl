@@ -103,10 +103,11 @@ async function renderCommits(events, feedElement, username) {
             if (!response.ok) throw new Error('Detail fetch failed');
             
             const data = await response.json();
+            const rawMessage = data.commit.message.split('\n')[0];
             return {
                 repoName: event.repo.name.replace(`${username}/`, ''),
                 repoUrl: `https://github.com/${event.repo.name}`,
-                message: data.commit.message.split('\n')[0],
+                message: rawMessage.length > 40 ? rawMessage.substring(0, 40) + '...' : rawMessage,
                 additions: data.stats.additions,
                 deletions: data.stats.deletions,
                 timeAgo: getTimeAgo(new Date(event.created_at)),
@@ -123,8 +124,8 @@ async function renderCommits(events, feedElement, username) {
 
         const li = document.createElement('li');
         li.innerHTML = `
-            <a href="${commit.repoUrl}" target="_blank" class="feed-repo" style="color: #cba6f7; text-decoration: none; font-weight: bold;">${commit.repoName}</a>: 
-            <a href="${commit.htmlUrl}" target="_blank" style="color: #89b4fa; text-decoration: none; border-bottom: 1px dashed rgba(137, 180, 250, 0.3); transition: border-bottom 0.2s;">${escapeHtml(commit.message)}</a>
+            <a href="${commit.repoUrl}" target="_blank" class="feed-repo">${commit.repoName}</a>: 
+            <a href="${commit.htmlUrl}" target="_blank" class="commit-message">${escapeHtml(commit.message)}</a>
             <span class="feed-stats" style="font-size: 0.85em; opacity: 0.8;">
                 (<span style="color: #a6e3a1;">+${commit.additions}</span> <span style="color: #f38ba8;">-${commit.deletions}</span>)
             </span>

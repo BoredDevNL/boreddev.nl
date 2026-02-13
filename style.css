@@ -53,7 +53,7 @@ a {
 }
 
 a:hover {
-    color: var(--ctp-lavender);
+    color: #dc8a78;
 }
 
 .container {
@@ -72,6 +72,10 @@ a:hover {
     font-weight: 700;
     margin-bottom: 0.5rem;
     color: var(--ctp-text);
+}
+
+#typing-text {
+    color: #dd7878;
 }
 
 .cursor {
@@ -103,7 +107,7 @@ a:hover {
 }
 
 .link-highlight {
-    color: var(--ctp-mauve);
+    color: #dd7878;
     font-weight: 600;
 }
 
@@ -118,7 +122,7 @@ a:hover {
 }
 
 .socials-hero a:hover {
-    color: var(--ctp-blue);
+    color: #dc8a78;
     transform: translateY(-2px);
     transition: transform 0.2s, color 0.2s;
 }
@@ -150,7 +154,7 @@ a:hover {
 
 .project-card:hover {
     transform: translateY(-5px);
-    border-color: var(--ctp-blue);
+    border-color: #dc8a78;
 }
 
 .project-image {
@@ -215,7 +219,7 @@ a:hover {
 }
 
 .project-links a:hover {
-    color: var(--ctp-blue);
+    color: #dc8a78;
 }
 
 /* Activity Feed */
@@ -267,9 +271,33 @@ a:hover {
 }
 
 .feed-time {
-    color: var(--ctp-overlay0);
+    color: #dc8a78;
     font-size: 0.8rem;
     float: right;
+}
+
+/* GitHub Feed Styles */
+#github-feed .feed-repo {
+    color: var(--ctp-mauve);
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+#github-feed .feed-repo:hover {
+    color: var(--ctp-lavender);
+}
+
+.commit-message {
+    color: var(--ctp-blue);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(137, 180, 250, 0.3);
+    transition: border-bottom 0.2s, color 0.2s;
+}
+
+.commit-message:hover {
+    color: #dc8a78;
+    border-bottom-color: #dd7878;
 }
 
 /* Location Map */
@@ -361,9 +389,9 @@ a:hover {
 }
 
 .socials-footer a {
-    color: var(--ctp-subtext0);
+    color: #dd7878;
 }
 
 .socials-footer a:hover {
-    color: var(--ctp-blue);
+    color: #dc8a78;
 }
