@@ -1,109 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chris | BoreddevNL</title>
+    <title>Christiaan</title>
+    <meta name="description"
+        content="Chris (BoreddevNL), a student developer from the Netherlands building BoredOS, a hobby operating system written in C and Assembly.">
+    <meta property="og:title" content="Chris — BoreddevNL">
+    <meta property="og:description" content="Student developer from the Netherlands, building BoredOS.">
+    <meta property="og:image" content="https://boreddev.nl/boredos.jpg">
+    <meta property="og:url" content="https://boreddev.nl">
+    <meta name="theme-color" content="#121212">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preload" href="fonts/DepartureMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
 
-    <main class="container">
-        <section class="hero">
-            <h1>Hey! I'm <span id="typing-text"></span><span class="cursor">&nbsp;</span></h1>
-            <h2 class="subtitle">BoreddevNL - Netherlands</h2>
-            
-            <p class="bio">
-                I'm currently a high school student. I have been coding since i was 11
-                and have been working on some major personal projects like <a href="https://github.com/boreddevnnl/boredos" target="_blank" class="link-highlight">BoredOS.</a>
-                Seeing people support me on my projects and using them is what keeps me going on my developer journey.
+<body>
+    <header class="topbar">
+        <div class="wrap topbar-inner">
+            <a href="/" class="wordmark">boreddev<span>.nl</span></a>
+            <nav class="topnav" aria-label="Sections">
+                <a id="nav-boredos" href="#boredos">BoredOS</a>
+                <a id="nav-activity" href="#activity">Activity</a>
+                <a id="nav-writing" href="#writing">Writing</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <section class="intro">
+            <h1>Hey, I'm Christiaan.</h1>
+            <p class="lead">
+                I'm a high school student developer from the Netherlands. I love coding in my free time.
+                My glorychild is <a href="https://boredos.dev" target="_blank" rel="noopener">BoredOS</a>,
+                an operating system I've been building from scratch for years.
             </p>
 
-            <div class="socials-hero">
-                <a href="https://github.com/boreddevnl" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                <a href="https://discord.com/users/738324643324100629" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
-                <a href="mailto:chris@boreddev.nl" aria-label="Email"><i class="fas fa-envelope"></i></a>
-            </div>
+            <ul class="contact">
+                <li><span class="label">GitHub</span><a id="link-github" href="https://github.com/boreddevnl"
+                        target="_blank" rel="noopener">@boreddevnl</a></li>
+                <li><span class="label">Email</span><a id="link-email"
+                        href="mailto:chris@boreddev.nl">chris@boreddev.nl</a></li>
+                <li><span class="label">Discord</span><a id="link-discord"
+                        href="https://discord.com/users/738324643324100629" target="_blank" rel="noopener">Message
+                        me</a></li>
+            </ul>
         </section>
 
-        <section class="projects">
-            <h3>Featured projects</h3>
-            <div class="project-grid">
-                <div class="project-card">
-                    <img src="boredos.jpg" alt="BoredOS Preview" class="project-image" style="width: 100%; object-fit: cover;">
-                    <div class="project-content">
-                        <h4>BoredOS</h4>
-                        <p>A custom operating system project focused on learning low-level development and system architecture.</p>
-                        <div class="tags">
-                            <span class="tag tag-blue">C</span>
-                            <span class="tag tag-mauve">Assembly</span>
-                            <span class="tag tag-green">OSDev</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://os.boreddev.nl" target="_blank" aria-label="BoredOS Website"><i class="fas fa-arrow-up-right-from-square"></i></a>
-                            <a href="https://github.com/boreddevnl/boredos" target="_blank" aria-label="BoredOS GitHub"><i class="fab fa-github"></i></a>
-                        </div>
-                    </div>
+        <section class="section" id="boredos" aria-labelledby="boredos-heading">
+            <figure class="window">
+                <figcaption class="window-bar">
+                    <a href="https://boredos.dev" target="_blank" rel="noopener">boredos.dev ↗</a>
+                </figcaption>
+                <a href="https://boredos.dev" target="_blank" rel="noopener">
+                    <img src="boredos.jpg" alt="Screenshot of the BoredOS desktop" width="1919" height="1080"
+                        loading="lazy">
+                </a>
+            </figure>
+
+            <div class="project">
+                <div class="project-text">
+                    <p>
+                        BoredOS is a from-scratch x86-64 UNIX-like hobby operating system written in C.
+                    </p>
+                    <p class="project-links">
+                        <a id="link-boredos-site" href="https://boredos.dev" target="_blank" rel="noopener">Website
+                            ↗</a>
+                        <a id="link-boredos-source" href="https://github.com/BoredOS/BoredOS" target="_blank"
+                            rel="noopener">Source ↗</a>
+                        <a id="link-boredos-blog" href="https://blog.boredos.dev" target="_blank" rel="noopener">Devlog
+                            ↗</a>
+                    </p>
                 </div>
 
-                <div class="project-card">
-                    <img src="dashfmimproved.png" alt="dash.fm Preview" class="project-image" style="width: 100%; object-fit: cover;">
-                    <div class="project-content">
-                        <h4>last.fm-improved</h4>
-                        <p>An improved version of dash.fm with enhanced UI/UX and extra features.</p>
-                        <div class="tags">
-                            <span class="tag tag-yellow">JS</span>
-                            <span class="tag tag-red">HTML</span>
-                            <span class="tag tag-lavender">last.fm API</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://dash.boreddev.nl" target="_blank" aria-label="last.fm-improved Website"><i class="fas fa-arrow-up-right-from-square"></i></a>
-                            <a href="https://github.com/boreddevnl/dash.fm-improved" target="_blank" aria-label="last.fm-improved GitHub"><i class="fab fa-github"></i></a>
-                        </div>
+                <dl class="facts">
+                    <div>
+                        <dt>Stars</dt>
+                        <dd id="repo-stars">—</dd>
                     </div>
-                </div>
+                    <div>
+                        <dt>Forks</dt>
+                        <dd id="repo-forks">—</dd>
+                    </div>
+                    <div>
+                        <dt>Last push</dt>
+                        <dd id="repo-pushed">—</dd>
+                    </div>
+                </dl>
             </div>
         </section>
 
-        <section class="activity-feed">
-            <div class="column">
-                <h3>Recent commits</h3>
-                <ul class="list-feed" id="github-feed">
-                    <li><span class="feed-repo">Loading...</span></li>
-                </ul>
-            </div>
-            <div class="column">
-                <h3>Latest posts</h3>
-                <ul class="list-feed" id="blog-feed">
-                    <li><span class="feed-repo">Loading...</span></li>
-                </ul>
-            </div>
+        <section class="section" id="activity" aria-labelledby="commits-heading">
+            <h2 class="section-title" id="commits-heading">Recent commits</h2>
+            <ul class="feed" id="github-feed">
+                <li class="feed-empty">Loading…</li>
+            </ul>
         </section>
 
-        <section class="location">
-            <h3>Currently based in: Netherlands</h3>
-            <div class="map-container">
-                <img src="mapnl.jpg" alt="Map of Netherlands" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
+        <section class="section" id="writing" aria-labelledby="posts-heading">
+            <h2 class="section-title" id="posts-heading">Latest posts</h2>
+            <ul class="feed" id="blog-feed">
+                <li class="feed-empty">Loading…</li>
+            </ul>
         </section>
     </main>
 
-    <footer class="floating-footer">
-        <div class="footer-left">
-            &copy; 2026 BoreddevNL
-        </div>
-        <div class="footer-right">
-            <span id="local-time">--:--</span>
-            <span class="separator">|</span>
-            <div class="socials-footer">
-                <a href="https://github.com/boreddevnl" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://discord.com/users/738324643324100629" target="_blank"><i class="fab fa-discord"></i></a>
-                <a href="mailto:chris@boreddev.nl"><i class="fas fa-envelope"></i></a>
-            </div>
+    <footer class="footer">
+        <div class="wrap footer-inner">
+            <span>© 2026 BoreddevNL</span>
+            <span>Netherlands · <span id="local-time">--:--</span> local time</span>
         </div>
     </footer>
 
     <script src="script.js"></script>
 </body>
+
 </html>
